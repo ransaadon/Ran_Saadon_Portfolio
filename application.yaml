@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-argo-application
+  namespace: argocd
+spec: 
+  project: default
+
+  source:
+    repoURL: https://github.com/ransaadon/Ran_Saadon_Portfolio.git
+    targetRevision: HEAD
+    path: /
+
+  destination:
+    server: https://kuberbetes.defualt.svc
+    namespace: myapp
+  
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+
+    automated:
+      selfHeal: true
+      prune: true
+      
