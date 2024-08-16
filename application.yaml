@@ -9,10 +9,10 @@ spec:
   source:
     repoURL: https://github.com/ransaadon/Ran_Saadon_Portfolio.git
     targetRevision: HEAD
-#    path: /
+    path: /
 
   destination:
-    server: https://kuberbetes.defualt.svc
+    server: https://kubernetes.defualt.svc
     namespace: myapp
   
 
