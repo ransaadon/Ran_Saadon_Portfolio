@@ -12,7 +12,7 @@ spec:
     path: "."
 
   destination:
-    server: https://kubernetes.defualt.svc
+    server: https://kubernetes.default.svc
     namespace: myapp
   
 
