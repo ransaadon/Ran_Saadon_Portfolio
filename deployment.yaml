@@ -16,4 +16,4 @@ spec:
       - name: myapp
         image: ransaadon1990/ran_saadon_portfolio:latest
         ports:
-        - containerPort: 8081
+        - containerPort: 8080
