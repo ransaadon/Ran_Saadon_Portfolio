@@ -15,5 +15,8 @@ spec:
       containers:
       - name: myapp
         image: ransaadon1990/ran_saadon_portfolio:latest
+        env:
+        - name: CALLBACK_URL
+          value: "http://localhost:5000/callback"
         ports:
         - containerPort: 8080
