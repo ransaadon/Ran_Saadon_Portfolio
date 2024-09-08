@@ -46,5 +46,3 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_IMAGE }} .
           docker push ${{ secrets.DOCKER_IMAGE }}
-
-תסביר לי מה כל שלב עושה
