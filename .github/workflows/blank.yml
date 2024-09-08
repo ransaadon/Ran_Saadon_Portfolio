@@ -46,7 +46,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_IMAGE }} .
 
       - name: Run Snyk Security Scan
-        uses: snyk/actions/cli@v1
+        uses: snyk/actions@v1
         with:
           args: test --all-projects
         env:
