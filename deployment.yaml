@@ -20,3 +20,5 @@ spec:
           value: "http://localhost:5000/callback"
         ports:
         - containerPort: 8080
+        securityContext:
+          allowPrivilegeEscalation: false
