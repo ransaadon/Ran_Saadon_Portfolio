@@ -55,8 +55,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Snyk CLI
-        run: npm install -g snyk
+      - name: Install latest Snyk CLI
+        run: npm install -g snyk@latest
 
       - name: Clean cache
         run: |
