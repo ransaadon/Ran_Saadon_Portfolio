@@ -55,11 +55,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
       - name: Install latest Snyk CLI
         run: npm install -g snyk@latest
 
-      - name: Run Snyk to check for vulnerabilities
+      - name: Run Snyk to check for vulnerabilities (debug mode)
+        run: DEBUG=*snyk* snyk test --json
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Print Snyk test results
         run: snyk test --json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
 
