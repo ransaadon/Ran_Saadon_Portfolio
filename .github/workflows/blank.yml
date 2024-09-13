@@ -52,17 +52,8 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Install latest Snyk CLI
-        run: npm install -g snyk@latest
-
-      - name: Run Snyk to check for vulnerabilities and produce SARIF report
-        run: snyk test --all-projects --sarif-file-output=snyk.sarif
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/python-3.8@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-      - name: Print SARIF file
-        run: cat snyk.sarif
-
