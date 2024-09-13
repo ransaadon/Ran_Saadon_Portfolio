@@ -47,7 +47,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_IMAGE }} .
           docker push ${{ secrets.DOCKER_IMAGE }}
 
-  bandit-test:
+  bandit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -63,13 +63,16 @@ jobs:
           pip install -r requirements.txt
           pip install bandit
 
-      - name: Run Bandit to check for security issues
+      - name: Print Bandit version
+        run: bandit --version
+
+      - name: Run Bandit to check for security issues (debug)
         run: |
-          bandit -r . -f json -o bandit-report.json
-          
+          bandit -r . -f json -o bandit-report.json -v
+
       - name: Print Bandit report
         run: |
-          cat bandit-report.json
+          cat bandit-report.json || true
 
       - name: Fail if Bandit found issues
         run: |
@@ -80,6 +83,7 @@ jobs:
             echo "Bandit found issues."
             exit 1
           fi
+
 
   security:
     runs-on: ubuntu-latest
