@@ -77,9 +77,5 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Print Snyk test results
-        run: snyk test --json
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
 
