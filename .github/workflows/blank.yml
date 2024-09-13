@@ -47,7 +47,29 @@ jobs:
           docker build -t ${{ secrets.DOCKER_IMAGE }} .
           docker push ${{ secrets.DOCKER_IMAGE }}
 
+  bandit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install bandit
+
+      - name: Run Bandit to check for security issues
+        run: |
+          bandit -r . -f json -o bandit-report.json
+          
+      - name: Print Bandit report
+        run: |
+          cat bandit-report.json
 
   security:
     runs-on: ubuntu-latest
