@@ -58,6 +58,10 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
+      - name: Clean cache
+        run: |
+          rm -rf ~/.cache
+
       - name: Run Snyk to check for vulnerabilities (debug mode)
         run: DEBUG=*snyk* snyk test --all-projects --sarif-file-output=snyk.sarif
         env:
