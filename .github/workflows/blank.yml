@@ -71,6 +71,16 @@ jobs:
         run: |
           cat bandit-report.json
 
+      - name: Fail if Bandit found issues
+        run: |
+          if grep -q '"issues": []' bandit-report.json; then
+            echo "Bandit found no issues."
+            exit 0
+          else
+            echo "Bandit found issues."
+            exit 1
+          fi
+
   security:
     runs-on: ubuntu-latest
     steps:
