@@ -64,6 +64,6 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Print Snyk test results
-        run: snyk test --all-projects --json
+        run: snyk test --json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
