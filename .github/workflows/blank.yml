@@ -49,9 +49,6 @@ jobs:
 
 
 
-name: Example workflow for Python-3.8 using Snyk
-on: push
-jobs:
   security:
     runs-on: ubuntu-latest
     steps:
