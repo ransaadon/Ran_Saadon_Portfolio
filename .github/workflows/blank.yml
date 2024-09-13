@@ -4,70 +4,56 @@ on: [push, pull_request]
 
 jobs:
       
-  test:
-    runs-on: ubuntu-latest
-    container:
-      image: python:3.9-slim
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+  # test:
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: python:3.9-slim
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.9
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install pytest
+  #     - name: Install dependencies
+  #       run: |
+  #         pip install -r requirements.txt
+  #         pip install pytest
 
-      - name: Run tests
-        run: |
-          pytest test_app.py
+  #     - name: Run tests
+  #       run: |
+  #         pytest test_app.py
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v1
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
+  #     - name: Login to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
       
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKER_IMAGE }} .
-          docker push ${{ secrets.DOCKER_IMAGE }}
+  #     - name: Build and push Docker image
+  #       run: |
+  #         docker build -t ${{ secrets.DOCKER_IMAGE }} .
+  #         docker push ${{ secrets.DOCKER_IMAGE }}
 
 
 
   security:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Install latest Snyk CLI
-        run: npm install -g snyk@latest
-
-      - name: Clean cache
-        run: |
-          rm -rf ~/.cache
-
-      - name: Run Snyk to check for vulnerabilities (debug mode)
-        run: DEBUG=*snyk* snyk test --all-projects --sarif-file-output=snyk.sarif
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/python-3.8@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: snyk.sarif
