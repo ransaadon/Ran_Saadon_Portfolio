@@ -50,7 +50,7 @@ jobs:
           pytest --maxfail=1 --disable-warnings -q --junitxml=reports/pytest-results.xml
 
       - name: Upload test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: pytest-results
           path: reports/pytest-results.xml
@@ -76,10 +76,6 @@ jobs:
           docker build -t ${{ secrets.DOCKER_IMAGE }} .
           docker push ${{ secrets.DOCKER_IMAGE }}
       
-      
-
-
-
   sast:
     runs-on: ubuntu-latest
     steps:
