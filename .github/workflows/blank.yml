@@ -53,7 +53,41 @@ jobs:
 
 
 
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Safety SCA scan
+        run: |
+          pip install safety
+          safety check --file requirements.txt --json > reports/safety-report.json
+        continue-on-error: true
+
+      - name: Print Safety report
+        run: cat reports/safety-report.json
+
+      - name: Install Bandit
+        run: |
+          pip install bandit
+
+      - name: Run Bandit SAST scan
+        run: |
+          bandit -r . -f json -o reports/bandit-report.json
+        continue-on-error: true
+
+      - name: Print Bandit report
+        run: cat reports/bandit-report.json
 
 
 
