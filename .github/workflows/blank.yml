@@ -48,7 +48,8 @@ jobs:
           pip install safety
           safety check --file requirements.txt --json > reports/safety-report.json
         continue-on-error: true
-
+      - name: Print Safety report
+        run: cat reports/safety-report.json
 
 
 
