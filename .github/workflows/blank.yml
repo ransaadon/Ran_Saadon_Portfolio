@@ -90,9 +90,6 @@ jobs:
       - name: Run Nmap scan
         run: docker run --rm -v ${{ github.workspace }}:/tmp hysnsec/nmap -p 80,443 -T4 -oX /tmp/nmap-output.xml localhost
       
-      - name: Print Folder github.workspace
-        run: cat ${{ github.workspace }}
-
       - name: Upload Nmap output
         uses: actions/upload-artifact@v3
         with:
