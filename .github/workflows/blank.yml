@@ -126,7 +126,7 @@ jobs:
 
       - name: Run ZAP Docker container
         run: |
-          docker run --rm -u zap -v ${{ github.workspace }}/reports:/zap/wrk:rw owasp/zap2docker-stable:2.15.0 zap-full-scan.py -t https://localhost -r /zap/wrk/dast-report.html
+          docker run --rm -u zap -v ${{ github.workspace }}/reports:/zap/wrk:rw owasp/zap2docker-stable:latest zap-full-scan.py -t https://localhost -r /zap/wrk/dast-report.html
         continue-on-error: true
 
       - name: Upload DAST report
