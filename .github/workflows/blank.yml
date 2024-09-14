@@ -78,11 +78,23 @@ jobs:
 
 
   nmap:
-    script:
-      - docker pull hysnsec/nmap
-      - docker run --rm -v $(pwd):/tmp hysnsec/nmap prod-rcgsg0ei -oX /tmp/nmap-output.xml
-    artifacts:
-      paths: [nmap-output.xml]
-      when: always
-    allow_failure: true
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Pull Nmap Docker image
+        run: docker pull hysnsec/nmap
+
+      - name: Run Nmap scan
+        run: docker run --rm -v ${{ github.workspace }}:/tmp hysnsec/nmap prod-rcgsg0ei -oX /tmp/nmap-output.xml
+
+      - name: Upload Nmap output
+        uses: actions/upload-artifact@v3
+        with:
+          name: nmap-output
+          path: nmap-output.xml
+
+      - name: Print Nmap output
+        run: cat nmap-output.xml || true
