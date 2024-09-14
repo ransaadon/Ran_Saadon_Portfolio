@@ -124,9 +124,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Install ZAP CLI
+        run: |
+          pip install zap-cli
+          zap-cli --help  # בדוק שהכלי הותקן בהצלחה
+
       - name: Run DAST scan
         run: |
-          # Replace with your DAST tool command
           zap-cli quick-scan --self-contained --output-dir reports https://localhost
         continue-on-error: true
 
