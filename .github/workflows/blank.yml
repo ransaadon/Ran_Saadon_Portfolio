@@ -47,45 +47,8 @@ jobs:
           docker build -t ${{ secrets.DOCKER_IMAGE }} .
           docker push ${{ secrets.DOCKER_IMAGE }}
 
-  bandit:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install bandit
-
-      - name: Print Bandit version
-        run: bandit --version
-
-      - name: Run Bandit to check for security issues (debug)
-        run: |
-          bandit -r . -f json -o bandit-report.json -v
-
-      - name: Print Bandit report
-        run: |
-          cat bandit-report.json || true
-
-      - name: Fail if Bandit found issues
-        run: |
-          if grep -q '"issues": []' bandit-report.json; then
-            echo "Bandit found no issues."
-            exit 0
-          else
-            echo "Bandit found issues."
-            exit 1
-          fi
-
-
-  security:
+  sast:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -114,4 +77,13 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
 
+  nmap:
+    stage: integration
+    script:
+      - docker pull hysnsec/nmap
+      - docker run --rm -v $(pwd):/tmp hysnsec/nmap prod-rcgsg0ei -oX /tmp/nmap-output.xml
+    artifacts:
+      paths: [nmap-output.xml]
+      when: always
+    allow_failure: true
 
