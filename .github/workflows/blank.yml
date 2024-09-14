@@ -68,11 +68,23 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      - name: Create reports directory
+        run: mkdir -p reports
+
       - name: Run Safety SCA scan
         run: |
           pip install safety
           safety check --file requirements.txt --json > reports/safety-report.json
         continue-on-error: true
+
+      - name: Verify Safety report creation
+        run: |
+          if [ -f reports/safety-report.json ]; then
+            echo "Safety report created successfully."
+          else
+            echo "Safety report not found."
+            exit 1
+          fi
 
       - name: Print Safety report
         run: cat reports/safety-report.json
