@@ -78,7 +78,6 @@ jobs:
 
 
   nmap:
-    stage: integration
     script:
       - docker pull hysnsec/nmap
       - docker run --rm -v $(pwd):/tmp hysnsec/nmap prod-rcgsg0ei -oX /tmp/nmap-output.xml
