@@ -111,6 +111,11 @@ jobs:
       - name: Print Bandit report
         run: cat reports/bandit-report.json
 
+      - name: Upload Bandit report
+        uses: actions/upload-artifact@v3
+        with:
+          name: bandit-report
+          path: reports/bandit-report.json
 
 
 
