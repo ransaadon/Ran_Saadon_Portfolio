@@ -124,14 +124,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install ZAP CLI
+      - name: Run ZAP Docker container
         run: |
-          pip install zap-cli
-          zap-cli --help  # בדוק שהכלי הותקן בהצלחה
-
-      - name: Run DAST scan
-        run: |
-          zap-cli quick-scan --self-contained --output-dir reports https://localhost
+          docker run --rm -u zap -v ${{ github.workspace }}/reports:/zap/wrk:rw owasp/zap2docker-stable zap-full-scan.py -t https://localhost -r /zap/wrk/dast-report.html
         continue-on-error: true
 
       - name: Upload DAST report
