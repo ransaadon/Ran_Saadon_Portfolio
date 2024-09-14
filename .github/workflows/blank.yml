@@ -82,11 +82,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js 20 (if needed for custom actions)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
       - name: Pull Nmap Docker image
         run: docker pull hysnsec/nmap
 
