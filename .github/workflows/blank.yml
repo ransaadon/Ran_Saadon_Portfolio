@@ -27,9 +27,15 @@ jobs:
           pip install safety
           safety check --file requirements.txt --json > reports/safety-report.json
         continue-on-error: true
+
       - name: Print Safety report
         run: cat reports/safety-report.json
 
+      - name: Upload Safety report
+        uses: actions/upload-artifact@v3
+        with:
+          name: safety-report
+          path: reports/safety-report.json
   test:
     runs-on: ubuntu-latest
     steps:
