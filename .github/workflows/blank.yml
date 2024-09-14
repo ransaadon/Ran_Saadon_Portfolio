@@ -30,6 +30,31 @@ jobs:
       - name: Print Safety report
         run: cat reports/safety-report.json
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Pytest
+        run: |
+          pytest --maxfail=1 --disable-warnings -q --junitxml=reports/pytest-results.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: pytest-results
+          path: reports/pytest-results.xml
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -50,6 +75,8 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_IMAGE }} .
           docker push ${{ secrets.DOCKER_IMAGE }}
+      
+      
 
 
 
