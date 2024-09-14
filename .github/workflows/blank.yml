@@ -71,23 +71,16 @@ jobs:
       - name: Create reports directory
         run: mkdir -p reports
 
-      - name: Run Safety SCA scan
+      - name: Install Bandit
+        run: pip install bandit
+
+      - name: Run Bandit SAST scan
         run: |
-          pip install safety
-          safety check --file requirements.txt --json > reports/safety-report.json
+          bandit -r . -f json -o reports/bandit-report.json
         continue-on-error: true
 
-      - name: Verify Safety report creation
-        run: |
-          if [ -f reports/safety-report.json ]; then
-            echo "Safety report created successfully."
-          else
-            echo "Safety report not found."
-            exit 1
-          fi
-
-      - name: Print Safety report
-        run: cat reports/safety-report.json
+      - name: Print Bandit report
+        run: cat reports/bandit-report.json
 
       - name: Install Bandit
         run: |
