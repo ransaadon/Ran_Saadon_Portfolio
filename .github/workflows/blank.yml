@@ -3,28 +3,6 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-      
-  test:
-    runs-on: ubuntu-latest
-    container:
-      image: python:3.9-slim
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install pytest
-
-      - name: Run tests
-        run: |
-          pytest test_app.py
 
   build:
     runs-on: ubuntu-latest
@@ -47,8 +25,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_IMAGE }} .
           docker push ${{ secrets.DOCKER_IMAGE }}
 
-
-  sast:
+  sca:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -57,42 +34,95 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.9'
 
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
 
-      - name: Install latest Snyk CLI
-        run: npm install -g snyk@latest
+      - name: Run Safety SCA scan
+        run: |
+          pip install safety
+          safety check --file requirements.txt --json > reports/safety-report.json
+        continue-on-error: true
 
-      - name: Run Snyk to check for vulnerabilities (debug mode)
-        run: DEBUG=*snyk* snyk test --json
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Print Snyk test results
-        run: snyk test --json
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-  nmap:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
-      - name: Pull Nmap Docker image
-        run: docker pull hysnsec/nmap
 
-      - name: Run Nmap scan
-        run: docker run --rm -v ${{ github.workspace }}:/tmp hysnsec/nmap -p 80,443 -T4 -oX /tmp/nmap-output.xml localhost
+
+
+
+
+  # test:
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: python:3.9-slim
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.9
+
+  #     - name: Install dependencies
+  #       run: |
+  #         pip install -r requirements.txt
+  #         pip install pytest
+
+  #     - name: Run tests
+  #       run: |
+  #         pytest test_app.py
+
+
+
+  # sast:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: '3.8'
+
+  #     - name: Install dependencies
+  #       run: |
+  #         pip install -r requirements.txt
+
+  #     - name: Install latest Snyk CLI
+  #       run: npm install -g snyk@latest
+
+  #     - name: Run Snyk to check for vulnerabilities (debug mode)
+  #       run: DEBUG=*snyk* snyk test --json
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  #     - name: Print Snyk test results
+  #       run: snyk test --json
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  # nmap:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+
+  #     - name: Pull Nmap Docker image
+  #       run: docker pull hysnsec/nmap
+
+  #     - name: Run Nmap scan
+  #       run: docker run --rm -v ${{ github.workspace }}:/tmp hysnsec/nmap -p 80,443 -T4 -oX /tmp/nmap-output.xml localhost
       
-      - name: Upload Nmap output
-        uses: actions/upload-artifact@v3
-        with:
-          name: nmap-output
-          path: nmap-output.xml
+  #     - name: Upload Nmap output
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: nmap-output
+  #         path: nmap-output.xml
 
-      - name: Print Nmap output
-        run: cat nmap-output.xml || true
+  #     - name: Print Nmap output
+  #       run: cat nmap-output.xml || true
