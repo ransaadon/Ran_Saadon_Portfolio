@@ -82,20 +82,6 @@ jobs:
       - name: Print Bandit report
         run: cat reports/bandit-report.json
 
-      - name: Install Bandit
-        run: |
-          pip install bandit
-
-      - name: Run Bandit SAST scan
-        run: |
-          bandit -r . -f json -o reports/bandit-report.json
-        continue-on-error: true
-
-      - name: Print Bandit report
-        run: cat reports/bandit-report.json
-
-
-
 
 
 
