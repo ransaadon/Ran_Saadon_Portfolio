@@ -76,6 +76,16 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
+  node-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Verify Node.js version
+        run: node -v
 
   nmap:
     runs-on: ubuntu-latest
