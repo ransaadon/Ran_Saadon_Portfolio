@@ -135,6 +135,10 @@ jobs:
           name: dast-report
           path: reports/dast-report.html
 
+
+          
+      - name: List report files
+        run: ls -la reports
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Checkout repository
