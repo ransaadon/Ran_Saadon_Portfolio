@@ -124,10 +124,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Create reports directory
+        run: mkdir -p reports
+
       - name: Run ZAP Docker container
         run: |
           docker run --rm -u zap -v ${{ github.workspace }}/reports:/zap/wrk:rw owasp/zap2docker-stable:latest zap-full-scan.py -t https://localhost -r /zap/wrk/dast-report.html
         continue-on-error: true
+
+      - name: List report files
+        run: ls -la reports
 
       - name: Upload DAST report
         uses: actions/upload-artifact@v3
@@ -135,10 +141,6 @@ jobs:
           name: dast-report
           path: reports/dast-report.html
 
-
-          
-      - name: List report files
-        run: ls -la reports
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Checkout repository
